@@ -2,7 +2,7 @@
 
 </p>
 <p align="center">
-<img src="" width="400">
+<img src="https://github.com/ablaamim/Kubernetes-RKE2/blob/main/imgs/grafana-prometheus.webp" width="400">
 </p>
 
 
@@ -114,4 +114,45 @@ NAME                                 CLASS   HOSTS                              
 kube-prometheus-stack-alertmanager   nginx   alertmanager.157.230.131.228.sslip.io   138.68.229.21,138.68.29.45,143.110.133.40,157.230.131.228,157.230.143.116   80      142m
 kube-prometheus-stack-grafana        nginx   grafana.157.230.131.228.sslip.io        138.68.229.21,138.68.29.45,143.110.133.40,157.230.131.228,157.230.143.116   80      142m
 kube-prometheus-stack-prometheus     nginx   prometheus.157.230.131.228.sslip.io     138.68.229.21,138.68.29.45,143.110.133.40,157.230.131.228,157.230.143.116   80      142m
+
+### Verify Longhorn StorageClass
+
+```bash
+kubectl get storageclass
+```
+
+### Enable persistence for Grafana
+
+```bash
+helm upgrade -n monitoring kube-prometheus-stack prometheus-community/kube-prometheus-stack \
+  --reuse-values \
+  --set grafana.persistence.enabled=true \
+  --set grafana.persistence.storageClassName=longhorn \
+  --set grafana.persistence.size=10Gi
+```
+
+> This creates a PVC for Grafana’s data (dashboards, config)
+
+### Enable persistence for Prometheus
+
+```bash
+helm upgrade -n monitoring kube-prometheus-stack prometheus-community/kube-prometheus-stack \
+  --reuse-values \
+  --set prometheus.prometheusSpec.storageSpec.volumeClaimTemplate.spec.storageClassName=longhorn \
+  --set prometheus.prometheusSpec.storageSpec.volumeClaimTemplate.spec.resources.requests.storage=10Gi
+```
+
+### Persistence for Alertmanager
+
+```bash
+helm upgrade -n monitoring kube-prometheus-stack prometheus-community/kube-prometheus-stack \
+  --reuse-values \
+  --set alertmanager.alertmanagerSpec.storage.volumeClaimTemplate.spec.storageClassName=longhorn \
+  --set alertmanager.alertmanagerSpec.storage.volumeClaimTemplate.spec.resources.requests.storage=5Gi
+```
+
+### Verify
+
+```bash
+kubectl get pvc -n monitoring
 ```
