@@ -6,27 +6,27 @@
 </p>
 
 
-📊 kube-prometheus-stack
+### 📊 kube-prometheus-stack
 
-The kube-prometheus-stack Helm chart provides a full Kubernetes monitoring setup in one package:
+> The kube-prometheus-stack Helm chart provides a full Kubernetes monitoring setup in one package:
 
-Prometheus for metrics storage
+* Prometheus for metrics storage
 
-Grafana with preloaded dashboards
+* Grafana with preloaded dashboards
 
-Alertmanager for notifications
+* Alertmanager for notifications
 
-Exporters (node, kube-state, etc.)
+* Exporters (node, kube-state, etc.)
 
-🏗️ Production-ready?
+### 🏗️ Production-ready?
 
-Yes ✅ It’s widely used in production clusters because it’s:
+* Yes ✅ It’s widely used in production clusters because it’s:
 
-📦 Well-maintained & based on Prometheus Operator best practices
+* 📦 Well-maintained & based on Prometheus Operator best practices
 
-🔒 Supports HA, TLS, RBAC
+* 🔒 Supports HA, TLS, RBAC
 
-💾 Persistent storage & resource tuning are required for production use
+* 💾 Persistent storage & resource tuning are required for production use
 
 > install and expose Prometheus, Grafana, and Alertmanager on an RKE2 cluster using Helm. It uses the bundled kube-prometheus-stack (Prometheus Operator) and NGINX Ingress with sslip.io hostnames.
 
