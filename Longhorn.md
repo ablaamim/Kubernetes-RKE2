@@ -34,3 +34,22 @@ kubectl get pods --namespace longhorn-system
 ### Exploring Rancher Longhorn
 
 > Once all the pods show as Running in the longhorn-system namespace, you can access Rancher Longhorn! Just like the Rancher Manager, we are utilizing sslip.io, so there is no additional configuration required to access Longhorn. Let's head over to the domain name.
+
+
+### Add longhorn monitoring service
+
+```bash
+helm upgrade -n longhorn-system longhorn longhorn/longhorn \
+  --reuse-values \
+  --set metrics.serviceMonitor.enabled=true
+```
+
+### add label
+
+```bash
+kubectl patch servicemonitor longhorn-prometheus-servicemonitor \
+  -n longhorn-system \
+  --type merge \
+  -p '{"metadata":{"labels":{"release":"kube-prometheus-stack"}}}'
+
+```
