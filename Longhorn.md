@@ -22,7 +22,7 @@ helm repo update
 # Create the Longhorn Namespace and Install Longhorn
 kubectl create namespace longhorn-system
 
-helm upgrade -i longhorn longhorn/longhorn --namespace longhorn-system --set ingress.enabled=true --set ingress.host=longhorn.157.230.131.228.sslip.io
+helm upgrade -i longhorn longhorn/longhorn --namespace longhorn-system --set ingress.enabled=true --set ingress.host=longhorn.165.22.133.131.sslip.io
 
 # Wait for the deployment and rollout
 sleep 30

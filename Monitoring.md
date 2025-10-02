@@ -16,8 +16,6 @@
 
 * Alertmanager for notifications
 
-* Exporters (node, kube-state, etc.)
-
 ### 🏗️ Production-ready?
 
 * Yes ✅ It’s widely used in production clusters because it’s:
@@ -95,25 +93,22 @@ helm upgrade -n monitoring kube-prometheus-stack prometheus-community/kube-prome
   --set grafana.service.type=ClusterIP \
   --set grafana.ingress.enabled=true \
   --set grafana.ingress.ingressClassName=nginx \
-  --set grafana.ingress.hosts[0]=grafana.157.230.131.228.sslip.io \
+  --set grafana.ingress.hosts[0]=grafana.165.22.133.131.sslip.io \
   \
   --set prometheus.ingress.enabled=true \
   --set prometheus.ingress.ingressClassName=nginx \
-  --set prometheus.ingress.hosts[0]=prometheus.157.230.131.228.sslip.io \
+  --set prometheus.ingress.hosts[0]=prometheus.165.22.133.131.sslip.io \
   \
   --set alertmanager.ingress.enabled=true \
   --set alertmanager.ingress.ingressClassName=nginx \
-  --set alertmanager.ingress.hosts[0]=alertmanager.157.230.131.228.sslip.io
+  --set alertmanager.ingress.hosts[0]=alertmanager.165.22.133.131.sslip.io
 ```
 
 ### Verify
 
-``bash
-root@ubuntu-s-4vcpu-8gb-240gb-intel-sfo2-01:~# kubectl get ingress -n monitoring
-NAME                                 CLASS   HOSTS                                   ADDRESS                                                                     PORTS   AGE
-kube-prometheus-stack-alertmanager   nginx   alertmanager.157.230.131.228.sslip.io   138.68.229.21,138.68.29.45,143.110.133.40,157.230.131.228,157.230.143.116   80      142m
-kube-prometheus-stack-grafana        nginx   grafana.157.230.131.228.sslip.io        138.68.229.21,138.68.29.45,143.110.133.40,157.230.131.228,157.230.143.116   80      142m
-kube-prometheus-stack-prometheus     nginx   prometheus.157.230.131.228.sslip.io     138.68.229.21,138.68.29.45,143.110.133.40,157.230.131.228,157.230.143.116   80      142m
+```bash
+kubectl get ingress -n monitoring
+```
 
 ### Verify Longhorn StorageClass
 
@@ -156,3 +151,20 @@ helm upgrade -n monitoring kube-prometheus-stack prometheus-community/kube-prome
 ```bash
 kubectl get pvc -n monitoring
 ```
+
+---
+
+# 🛡️ High Availability for kube-prometheus-stack
+
+The **kube-prometheus-stack** can be deployed in **High Availability (HA)** mode by increasing the number of replicas for its core components.  
+This ensures resiliency and avoids single points of failure.
+
+---
+
+## ⚙️ Enable HA by setting replicas
+
+### Prometheus (2 replicas recommended)
+```bash
+helm upgrade -n monitoring kube-prometheus-stack prometheus-community/kube-prometheus-stack \
+  --reuse-values \
+  --set prometheus.prometheusSpec.replicas=2
